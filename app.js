@@ -13,10 +13,10 @@ app.use(express.json());
 
 //making the connection to the sql database
 const db = mysql.createConnection({
-    user: "root",
-    host: "localhost",
-    password: process.env.SQL_PASSWORD,
-    database: "storagedgames"
+    user: process.env.DB_USER,
+    host: process.env.DB_HOST,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME
 })
 
 //Requests
