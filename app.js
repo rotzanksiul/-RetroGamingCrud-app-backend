@@ -3,7 +3,7 @@ require('dotenv').config();
 //create server
 const express = require('express')
 const app = express();
-const mysql = require('mysql2')
+const mysql = require('mysql')
 const cors = require('cors')
 
 //Make available to make request from the front end to the backend
@@ -11,16 +11,21 @@ app.use(cors());
 //to read json files
 app.use(express.json());
 
-
 //making the connection to the sql database
-const pool  = mysql.createPool({
+const db = mysql.createConnection({
     user: process.env.DB_USER,
     host: process.env.DB_HOST,
     password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME,
-    connectionLimit: 10
+    database: process.env.DB_NAME
 })
 
+connection.connect((err) => {
+  if (err) {
+    console.error('Error connecting to MySQL:', err);
+    return;
+  }
+  console.log('Connected to MySQL!');
+});
 
 //Requests
 
@@ -31,7 +36,7 @@ app.post('/create', (req, res) => {
     const year = req.body.year
     const platform = req.body.platform
 
-    pool.query(
+    db.query(
         'INSERT INTO games ( game, genre, year, platform) VALUES (?,?,?,?)',
         [game, genre, year, platform], 
         (err, result) => {
@@ -46,7 +51,7 @@ app.post('/create', (req, res) => {
 //READ 
 app.get('/games', (req,res)=>{
     
-    pool.query("SELECT * FROM games", (err,result)=>{
+    db.query("SELECT * FROM games", (err,result)=>{
         if(err){
             console.log(err);
         } else {
@@ -64,7 +69,7 @@ app.put('/games',(req, res)=>{
     const year = req.body.year
     const platform = req.body.platform
 
-    pool.query('UPDATE games SET game = ?, genre = ?, year = ?, platform = ? WHERE id =?', 
+    db.query('UPDATE games SET game = ?, genre = ?, year = ?, platform = ? WHERE id =?', 
     [game, genre, year, platform, id], 
     ((err,result)=>{
         if(err){
@@ -80,7 +85,7 @@ app.put('/games',(req, res)=>{
 app.delete('/games/:id',(req, res)=>{
     const id = req.params.id
 
-    pool.query('DELETE FROM games WHERE id = ?', id, 
+    db.query('DELETE FROM games WHERE id = ?', id, 
     (err, result)=>{
         if(err){
             console.log(err);
