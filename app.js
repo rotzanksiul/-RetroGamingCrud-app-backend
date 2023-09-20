@@ -36,9 +36,9 @@ app.post('/create', (req, res) => {
         [game, genre, year, platform], 
         (err, result) => {
             if(err){
-                console.log(err);
+                console.error(err);
             } else {
-                console.log('values added')
+                console.info('values added')
             }
         });
 });
@@ -48,10 +48,10 @@ app.get('/games', (req,res)=>{
     
     db.query("SELECT * FROM games", (err,result)=>{
         if(err){
-            console.log(err);
+            console.error(err);
         } else {
             res.send(result)
-            console.log('data received')
+            console.info('data received')
         }
     })
 })
@@ -68,10 +68,10 @@ app.put('/games',(req, res)=>{
     [game, genre, year, platform, id], 
     ((err,result)=>{
         if(err){
-            console.log(err);
+            console.error(err);
         } else {
             res.send(result)
-            console.log('data updated')
+            console.info('data updated')
         }
     }))
 })
@@ -83,10 +83,10 @@ app.delete('/games/:id',(req, res)=>{
     db.query('DELETE FROM games WHERE id = ?', id, 
     (err, result)=>{
         if(err){
-            console.log(err);
+            console.error(err);
         } else {
             res.send(result)
-            console.log('data deleted')
+            console.info('data deleted')
         }
     })
 })
@@ -95,5 +95,5 @@ const PORT = 3001
 
 // port to listen
 app.listen(process.env.PORT || PORT , () => {
-    console.log(`listening to port ${PORT}`)
+    console.info(`listening to port ${PORT}`)
 })
