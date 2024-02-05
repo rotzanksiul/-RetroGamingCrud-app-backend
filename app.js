@@ -11,6 +11,7 @@ app.use(cors());
 //to read json files
 app.use(express.json());
 
+
 // making the connection to the sql database
 const db = mysql.createConnection({
     user: process.env.DB_USER,
@@ -19,6 +20,8 @@ const db = mysql.createConnection({
     database: process.env.DB_NAME,
     port: process.env.DB_PORT,
 })
+
+
 
 
 //Requests
